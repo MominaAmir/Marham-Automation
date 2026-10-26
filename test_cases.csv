@@ -1,0 +1,72 @@
+step_id,flow,step,expected_result,automated
+PRE-01,Preflight,Appium connects to the phone,Session starts; phone screen is unlocked,yes
+PRE-02,Preflight,Check the Marham app is installed,App package is installed on the phone,yes
+PRE-03,Preflight,Read the app version,Version is recorded in the report and matches EXPECTED_APP_VERSION (if set),yes
+PRE-04,Preflight,Open the app,Home screen loads with no error message,yes
+PRE-05,Preflight,Check login,Test patient is logged in (or logs in with the fixed OTP),yes
+OC-01,OC,Open the app,Home screen loads with no error message,yes
+OC-02,OC,Check login,Test patient is logged in,yes
+OC-03,OC,Search for the test doctor by name,Results list shows the test doctor,yes
+OC-04,OC,Open the test doctor's profile,Name matches DOCTOR_NAME exactly (else run stops); Video Consultation card fee = OC_FEE,yes
+OC-05,OC,Tap Book Appointment on the Video Consultation card,Booking Summary opens; dates and time slots load,yes
+OC-06,OC,Pick the first date and the first time slot,Date and time are captured,yes
+OC-07,OC,"Under Appointment For, select the test patient (Self)",Test patient is listed and can be selected,yes
+OC-08,OC,Check the doctor card at the top of Booking Summary,Shows the test doctor's name and Video Consultation,yes
+OC-09,OC,Check Payment Summary,Total Amount = OC_FEE,yes
+OC-10,OC,Check the final Book Appointment button (do NOT tap it),Button is shown and enabled; nothing is booked,yes
+OC-11,OC,Leave Booking Summary without booking (Back),App leaves Booking Summary with no crash; nothing booked or charged,yes
+PC-01,PC,Open the app and check login,Home screen loads with no error; test patient logged in,yes
+PC-02,PC,Search for the test doctor and open the profile,Profile name matches DOCTOR_NAME exactly; otherwise the whole run stops,yes
+PC-03,PC,Swipe the cards to the test hospital (HOSPITAL),Hospital address shown; card fee = Rs. PC_FEE,yes
+PC-04,PC,Tap the hospital card's Book Appointment,Booking Summary opens showing the test hospital; time slots load,yes
+PC-05,PC,"Pick the first date and time, select the chosen patient (Self or a family member)",Payment Summary shows Hospital Discount; Total Amount = Rs. PC_FEE,yes
+PC-06,PC,Tap the final Book Appointment,Appointment Details pop-up opens,yes
+PC-07,PC,Check the Appointment Details pop-up,"Doctor, patient, fee and chosen time are exactly right; otherwise the run stops and nothing is booked",yes
+PC-08,PC,Tap Book Appointment in the pop-up (max 1 booking per run; asks before another),Physical Appointment Request Received! screen opens,yes
+PC-09,PC,Check the Request Received screen,"Shows the test doctor, chosen time, test hospital, Pay at Clinic and Pending Confirmation",yes
+SR-01,Search,Search by specialty (SPECIALTY),At least one doctor result is shown,yes
+SR-02,Search,Search for nonsense text (NONSENSE_SEARCH),A no-results message is shown and the app does not crash,yes
+NEG-01,Negative,"Open Booking Summary; check the Book button before a slot, after a slot, and after slot + patient","Book Appointment is hidden until both a slot and a patient are chosen, then appears; nothing is booked",yes
+NEG-02,Negative,Kill and reopen the app in the middle of booking,"App reopens on home, still logged in, no crash",yes
+MAN-01,Manual weekly,"After a PC booking, check SMS / WhatsApp / push to the test phone",Confirmation and cancellation messages arrive with correct details,no
+MAN-02,Manual weekly,"After PC cancel, reopen the doctor's slots for that date",The cancelled time slot is available again,no
+MAN-03,Manual weekly,"After the OC run, check My Appointments",No unpaid / pending OC booking was left behind,no
+MAN-04,Manual weekly,Ask Doctor Ops whether any test booking reached an agent,"No agent called, confirmed or scored a test booking",no
+MAN-05,Manual release day,Full OC payment on staging (or with a test payment method),Payment succeeds and the OC booking shows as paid,no
+OCP-01,OC payment,"Open the test doctor's Video Consultation Booking Summary (search, profile name check, card)",Booking Summary opens for the test doctor,yes
+OCP-03,OC payment,Tap the final Book Appointment,Appointment Details pop-up opens,yes
+OCP-04,OC payment,Check the Appointment Details pop-up,"Doctor, patient, fee and chosen time are exactly right; otherwise the run stops and nothing is booked",yes
+OCP-05,OC payment,Tap Book Appointment in the pop-up (max 1 booking per run; asks before another),Payment screen opens with Total Payable Amount = OC_FEE,yes
+OCP-06,OC payment,Turn on Marham Wallet,Balance is enough; Total Payable becomes Rs. 0; Pay with Wallet button shown,yes
+OCP-07,OC payment,Tap Pay with Wallet,"Consultation Confirmed! screen shows the test doctor, Video Consultation, chosen time, fee and Paid",yes
+OCP-02,OC payment,"Pick the first date and time, select the chosen patient (Self or a family member)",Total Amount = OC_FEE,yes
+OCP-08,OC payment,Tap View Receipt,"Payment Successful; chosen patient, WALLET, Paid and fee shown; Booking ID saved in the report",yes
+LATE-01,Late doctor (OC),Open Bookings and find the test doctor's late video booking (card shows Cancel & Refund),"All 3 tabs shown; card shows SCHEDULED, PAID, Video Consultation, the test doctor and a date/time",yes
+LATE-02,Late doctor (OC),Open the late booking's Appointment Details,"Full test doctor name (else the run stops), Video Consultation, SCHEDULED, PAID, time, 'didn't join your consultation' and 'Your PKR 3 is safe'",yes
+LATE-03,Late doctor (OC),Check the options and the rest of Appointment Details,"Wait More for 5 Minutes, Reschedule, Cancel & Refund; timeline Payment Received / Doctor Confirmed / Doctor is Running Late; Payment Details Rs. 3, Paid, Total Paid",yes
+RF-01,OC cancel & refund,Tap Cancel & Refund (only if you chose it),"Cancel appointment screen with 'Tell us why you want to cancel' and 3 reasons",yes
+RF-02,OC cancel & refund,Tap Confirm cancel without picking a reason,"'Pick a reason' error shown; stays on Cancel appointment",yes
+RF-03,OC cancel & refund,Pick a reason and tap Confirm cancel (max 1 cancellation per run),"Refund screen: Refund amount Rs. 3, Marham Wallet, Refund to Marham Wallet (Recommended)",yes
+RF-04,OC cancel & refund,Tap Request Refund,"Refund Request Submitted!: Marham Wallet, Total Amount Rs. 3, Status Submitted, within 24 business hours",yes
+RF-05,OC cancel & refund,Tap Back to Appointments,"Same booking's card now shows CANCELLED, TO BE REFUNDED and 'under review'",yes
+RF-06,OC cancel & refund,Open the cancelled booking's details,"CANCELLED, TO BE REFUNDED, refund notice, timeline Appointment Cancelled + Refund In Progress, Payment Status To Be Refunded, Track your refund",yes
+RF-07,OC cancel & refund,Tap Track your refund,"Refund Details: Marham Wallet, PKR 3, Requested / Approved / Processing / Refunded, Destination, Reference # (saved in the report)",yes
+RF-08,OC cancel & refund,Restart the app and look at Home,Home no longer offers View Options for the cancelled booking,yes
+RF-09,OC cancel & refund,Next day: open Track your refund again and check the wallet,"Refund shows Refunded and the Marham Wallet balance went up by Rs. 3",no
+WAIT-01,OC wait more,Tap Wait More for 5 Minutes (only if you chose it),"What the screen shows afterwards is saved in the report (expected result to be agreed)",yes
+RS-01,OC reschedule check,Tap Reschedule (only if you chose it),"Choice 'Same doctor' (Keep this doctor...) / 'Another doctor' shown; Another doctor is never tapped",yes
+RS-02,OC reschedule check,Tap Same doctor,"Reschedule screen: test doctor, Video Consultation, Book Appointment, Available Slots, Confirm reschedule (NOT tapped)",yes
+RS-03,OC reschedule check,Check today's slots against the phone's time,"No slot less than 15 minutes ahead; then Back without rescheduling",yes
+FAM-01,Friends & Family,Profile > Friends & Family (old Autotest members are deleted first),"Info text shown; Unaiza Nasir and Tooba listed; count next to the title = number of members",yes
+FAM-02,Friends & Family,Tap Add family member,"Add New Member opens: Full Name, Phone Number (optional), 8 relationships (Father ... Daughter), Add Member",yes
+FAM-03,Friends & Family,Tap Add Member with an empty form; then with a relationship but no name,Nothing is added both times; the form stays open,yes
+FAM-04,Friends & Family,Enter a name and a 7-digit phone number (0300123); tap Add Member,"Phone is optional: what happens is saved in the report (accepted or error). If it is saved, that member is deleted at once",yes
+FAM-07,Friends & Family,Open the test doctor's Booking Summary and pick the first slot (nothing booked),New member listed under Appointment For with relationship Son,yes
+FAM-05,Friends & Family,Enter a valid 11-digit phone and tap Add Member,"'<name> added to your family' shown; form closes; member in the list; count goes up by 1",yes
+FAM-06,Friends & Family,Check the new member's card,"Card shows the name, relationship (Son), gender (Male) and phone as +92...",yes
+FAM-08,Friends & Family,Tap the bin icon on the test member; tap CANCEL,"Delete Member pop-up with 'Are you sure...'; after CANCEL the member is still there, count unchanged",yes
+FAM-09,Friends & Family,Tap the bin icon again; tap DELETE,"'Family member removed' shown; member gone; count back; Unaiza Nasir and Tooba still there",yes
+FAM-10,Friends & Family,Open Booking Summary again (nothing booked),Deleted member no longer under Appointment For,yes
+FAM-11,Friends & Family,Booking Summary > Appointment For > Add New Member; tap Add Member with an empty form,"Form has 6 relationships + Gender Male/Female; alert 'Please fill name and relationship'; OK keeps the form open",yes
+FAM-12,Friends & Family,"Enter a name, Daughter, Female (no phone); tap Add Member","Form closes; new member listed under Appointment For with Daughter; nothing booked",yes
+FAM-13,Friends & Family,Profile > Friends & Family; check the card and delete the member,"Card shows the name, Daughter, Female and the account's phone (+923116771305); after DELETE it is gone",yes

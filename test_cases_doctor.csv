@@ -1,0 +1,65 @@
+step_id,flow,step,expected_result,automated
+DPRE-01,Doctor preflight,Appium connects to the phone,Session starts; phone screen is unlocked,yes
+DPRE-02,Doctor preflight,Check the doctor app (Marham Connect) is installed,com.ts.marham_connect is installed,yes
+DPRE-03,Doctor preflight,Read the doctor app version,Version is written in the report and matches DOCTOR_EXPECTED_APP_VERSION,yes
+DPRE-04,Doctor preflight,Open the doctor app,Home ('Overview') or the login screen opens,yes
+DPRE-05,Doctor preflight,Check who is logged in,The test doctor (DOCTOR_APP_NAME) is logged in; any other doctor = run stops,yes
+DLOG-01,Doctor login,Profile tab > Log Out,'Enter your mobile number' opens (no confirmation asked),yes
+DLOG-02,Doctor login,Tap Login with Email,"'Welcome back' opens with Email, Password and Login",yes
+DLOG-03,Doctor login,Tap Login with both boxes empty,Not logged in; still on 'Welcome back',yes
+DLOG-04,Doctor login,Enter the email and a wrong password (WRONG_PASSWORD); tap Login,Not logged in; still on 'Welcome back'; the app's message is saved in the report,yes
+DLOG-05,Doctor login,Enter the real password (typed by the tester); tap Login,Home ('Overview') opens with the test doctor's name,yes
+DLOG-06,Doctor login,Close and reopen the app,Still logged in as the test doctor,yes
+DAPT-01,Doctor appointments,Open the Appointments tab,"Title 'Appointments', tabs Upcoming / Completed / Others and the 'Showing ...' date range are shown",yes
+DAPT-02,Doctor appointments,Upcoming tab: read every card (scrolling),"Each card has status, patient, date, time and location; number of cards = the number on the Upcoming tab",yes
+DAPT-04,Doctor appointments,Check the buttons on SCHEDULED cards (nothing tapped),"All: View Detail (+ Chat on video). On the appointment day also: Start Session (video) or Showed Up, Not Showed Up (clinic)",yes
+DAPT-05,Doctor appointments,Tap View Detail on a scheduled video appointment,"'Appointment Details' shows the same patient, status, date, time and type, plus Start Session, Chat with Patient, Mark Showed Up, Mark Not Showed Up, Previous Prescriptions, Contact patient",yes
+DAPT-06,Doctor appointments,Scroll down on Appointment Details,'Payment Details' is shown with its values (saved in the report),yes
+DAPT-07,Doctor appointments,Go back,Appointments list with its tabs is shown again,yes
+DAPT-08,Doctor appointments,Open the Completed and Others tabs,Each shows complete cards or 'No appointments found',yes
+DACC-01,Doctor accept,"Make a new booking from the patient app (13-b Hospital, Pay at Clinic / Video Consultation, paid from Marham Wallet; Self or a family member) or use one already waiting in Pending Confirmations","New booking: card fee matches Manage Locations; pop-up shows doctor, patient and time; Request Received screen shows the booking with Pending Confirmation (video: Rs. fee and Paid)",yes
+DACC-02,Doctor accept,Patient app: find the booking in Bookings,Card shows AWAITING CONFIRMATION and 'Waiting for doctor confirmation.',yes
+DACC-03,Doctor accept,Doctor app: open Pending Confirmations from the Home tile,Tile count = number of cards; the new booking is listed with Accept and Reschedule,yes
+DACC-04,Doctor accept,Tap Accept on the new booking only,"'Appointment confirmed successfully' shown; card leaves the list, also after a restart; tile count goes down by 1",yes
+DACC-05,Doctor accept,Doctor app: Appointments > Upcoming,The booking is SCHEDULED with the same date and time at 13-b Hospital,yes
+DACC-06,Doctor accept,Patient app: Bookings again,"Card shows SCHEDULED, PAY AT CLINIC; no 'Waiting for doctor confirmation'",yes
+DPRF-01,Doctor profile,Open the Profile tab,"Test doctor's name, specialty, Verified Profile, experience and rating; all rows (View Profile ... Help & Support, Log Out) and the 4 section titles",yes
+DPRF-02,Doctor profile,Open View Profile,"Full Name, Email, Phone, PMDC, Specialization, Years of Experience filled and read-only; match the Profile tab",yes
+DPRF-03,Doctor profile,Open Manage Locations,"Exactly Video Consultation (Video, PKR 2) and 13-b Hospital (In-Person, PKR 100), each with an address",yes
+DPRF-04,Doctor profile,Open Edit Location for each location (nothing saved),"Hospital Details shows the same name and fee; at least one slot ON with days and Start < End",yes
+DPRF-05,Doctor profile,Open Scheduler Settings and show each location (nothing saved),"One location option selected; slot length = 10 min (video) and 5 min (13-b Hospital)",yes
+DPRF-06,Doctor profile,Open Manage Leaves,Leaves (or 'No leaves scheduled') are recorded in the report,yes
+DPRF-07,Doctor profile,"Patient app: Booking Summary of each location, today and tomorrow (nothing booked)","Slots only on working days, inside the hours, on the slot-length grid and spaced by it; none less than 15 min after now; tomorrow starts at the start time",yes
+DSCH-01,Doctor schedule,"Scheduler Settings > Video Consultation: change 10 min to 15 min, Save",'Scheduler settings updated'; reopened screen shows 15 min,yes
+DSCH-02,Doctor schedule,Patient app: Video Consultation Booking Summary for tomorrow,Slots are 15 minutes apart,yes
+DSCH-03,Doctor schedule,"Hospital Details (Video Consultation): switch the day after tomorrow OFF, Save",The day chip is OFF and saved,yes
+DSCH-04,Doctor schedule,Patient app: Video Consultation Booking Summary,That day has no date chip and no slots,yes
+DSCH-05,Doctor schedule,Clean-up (always): day back ON and slot length back to 10 min,Both saved (otherwise reports\MANUAL_CLEANUP_NEEDED.txt),yes
+DSCH-06,Doctor schedule,Patient app after the clean-up,The day has slots again and slots are 10 minutes apart,yes
+DLV-01,Doctor leave,Doctor app > Profile > Manage Leaves: look for a leave on the day after tomorrow,No leave on that day (else the test stops and changes nothing),yes
+DLV-02,Doctor leave,Patient app: Booking Summary of Video Consultation and 13-b Hospital,Both offer the day after tomorrow (date chip + slots),yes
+DLV-03,Doctor leave,Add New Leave: All Locations; Start and End Date = that day (date picker + OK); Reason 'Automation test leave'; Save Leave,Both dates show 'Oct 25 2026' style; 'Leave created successfully',yes
+DLV-04,Doctor leave,Manage Leaves (reopened),One card per location (Video Consultation + 13-b Hospital); date range = that day; Reason = the typed reason,yes
+DLV-05,Doctor leave,Patient app: Video Consultation Booking Summary,No date chip / slots on the leave day; tomorrow still offered,yes
+DLV-06,Doctor leave,Patient app: 13-b Hospital Booking Summary,No date chip / slots on the leave day; tomorrow still offered,yes
+DLV-07,Doctor leave,Clean-up (always): bin on each leave card of that day > Delete Leave dialog > DELETE,'Leave deleted successfully' each time; no leave left on that day (else reports/MANUAL_CLEANUP_NEEDED.txt),yes
+DLV-08,Doctor leave,Patient app: both Booking Summaries again,The leave day is offered again,yes
+DLV-09,Doctor leave,No leave on that day; patient 13-b offers it; Add New Leave for 13-b Hospital only and Save Leave,'Leave created successfully',yes
+DLV-10,Doctor leave,Manage Leaves (reopened),Exactly one card for that day: 13-b Hospital,yes
+DLV-11,Doctor leave,Patient app: 13-b Hospital Booking Summary,No date chip / slots on the leave day; tomorrow still offered,yes
+DLV-12,Doctor leave,Patient app: Video Consultation Booking Summary,The leave day is STILL offered (leave was only for 13-b),yes
+DLV-13,Doctor leave,Clean-up (always): delete the 13-b leave card,'Leave deleted successfully'; no leave left on that day,yes
+DLV-14,Doctor leave,Patient app: 13-b Hospital Booking Summary,The leave day is offered again,yes
+DMSG-01,Doctor messages,Doctor app > Appointments: first card with a Chat button (Upcoming then Completed) > Chat,Chat opens (patient name at the top; 'Enter message' box),yes
+DMSG-02,Doctor messages,Doctor types 'AT doctor <time>' and taps SEND,Message box is empty again; message is the newest one on the RIGHT with the right time,yes
+DMSG-03,Doctor messages,Open the phone's notifications,'Dr. Momina Testing has sent you a message' arrives within 20 s,yes
+DMSG-04,Doctor messages,Patient app > Bookings > SCHEDULED card of the test doctor > chat icon,The doctor's message is shown on the LEFT (received) within 60 s,yes
+DMSG-05,Doctor messages,Patient types 'AT patient <time>' and taps SEND,Newest message on the RIGHT with the right time; below the doctor's message,yes
+DMSG-06,Doctor messages,Doctor app (fresh start) > Chat again,The patient's message is on the LEFT below the doctor's own message (on the right),yes
+DMSG-07,Doctor messages,Patient app (fresh start) > chat again,Both messages are still there: doctor's on the left then own on the right,yes
+DMED-01,Doctor chat media,Put a test picture 'AT_chat_<time>.png' in the phone's Download folder,The file is on the phone,yes
+DMED-02,Doctor chat media,Doctor app chat: '+' > Files > the test picture,Back in the chat; the picture is the newest message on the RIGHT with the right time,yes
+DMED-03,Doctor chat media,Patient app chat (SCHEDULED booking > Chat with doctor),The doctor's picture is the newest message on the LEFT with the right time,yes
+DMED-04,Doctor chat media,Patient: mic > RECORD > about 4 s > SEND,Panel starts at 00:00 with SEND disabled; voice note is the newest message on the RIGHT; its length = the timer shown,yes
+DMED-05,Doctor chat media,Doctor app chat (fresh start),The voice note is the newest message on the LEFT with the same length; own picture still on the right,yes
+DMED-06,Doctor chat media,Clean-up (always): delete the test picture from the phone's Download folder,The file is gone,yes
